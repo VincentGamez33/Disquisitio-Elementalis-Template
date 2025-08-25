@@ -1,0 +1,477 @@
+\pagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+    \coordinate (A) at ($(current page.east)+(0,2.5)$);
+    \coordinate (B) at ($(current page.east)+(-3,1.125)$);
+    \coordinate (C) at ($(B)+(-18,-5.875)$);
+    
+    \fill[mainc!50!white] (current page.north west) rectangle (current page.south east);
+
+    \fill[white] 
+        % Figura blanca tras la figura más grande
+        ($(B)+(-2,-0.75)$) -- ++(-9,3.375) -- ++(5,1.875) -- ++ (9,-3.75) -- cycle
+        % Triángulo blanco el rombo y el triángulo
+        ($(B)+(-9,9.75)$) -- ++(2,0.75) -- ++(0,-1.5) -- cycle
+        % Figura blanca tras la figura de la derecha
+        ($(B)+(-12.5,4.5)$) -- ++(-5,1.875) -- ++(5,1.875) -- ++(5,-1.875) -- cycle;
+
+    \fill[mainc1]
+        % Figura de la derecha
+        (A) -- ++(0,1.5) -- ++(-2,0.75) -- ++(0,-3) -- ++(2,-0.75)
+        % Figura más grande
+        ($(B)+(-2,-0.75)$) -- ++(0,3) -- ++(2,-0.75) -- ++(0,4.5) -- ++(-2,0.75) -- ++(-2,-0.75)
+            -- ++(0,-1.5) -- ++(2,0.75) -- ++(0,-1.5) -- ++(-2,-0.75) -- ++(0,1.5) -- ++(-2,0.75)
+            -- ++(-2,-0.75) -- ++(2,-0.75) -- ++(0,-1.5) -- ++(-2,0.75) -- ++(-2,-0.75) -- ++ (2,-0.75)
+            -- ++(0,-1.5) -- ++(2,-0.75) -- ++(2,0.75) -- ++(0,-1.5) -- cycle
+        % Rombo y triángulo
+        ($(B)+(-2.5,9.75)$) -- ++(-2,0.75) -- ++(-2,-0.75) -- ++(-2,-0.75) -- ++(0,1.5) -- ++(4,-1.5)
+        % Figura arriba izquierda
+        ($(B)+(-12.5,2.25)$) -- ++(-2,0.75) -- ++(0,4.5) -- ++(2,0.75) -- ++(0,-1.5) -- ++(-2,-0.75) -- ++(2,-0.75) -- cycle
+        % Triángulos arriba izquierda
+        ($(B)+(-14.5,9.5)$) -- ++(0.4,-0.7) -- ++(-0.8,0) -- cycle
+        ($(B)+(-14.5,11.25)$) -- ++(0.2,-0.35) -- ++(-0.4,0) -- cycle
+        % Figura abajo izquierda
+        ($(C)+(0,7)$) -- ++(2,-0.75) -- ++(0,-1.5) -- ++(-2,-0.75);
+        
+    %..................................................
+    %
+    %    Ciclo para las líneas tipo sierra (arriba)
+    %__________________________________________________
+    \foreach \y/\n in {5.85/10, 5.6/12} {
+        \draw[mainc1, line width=0.5mm] ($(B)+(-3.778,\y)$)
+        \foreach \i in {1,...,\n} {
+            -- ++(-0.222,{ifthenelse(mod(\i,2)==1,-0.17,0.17)})
+        };
+    }
+
+    %..................................................
+    %
+    %    Ciclo de líneas de sierra con ángulo de 5°
+    %__________________________________________________
+    \begin{scope}
+        \clip (A) -- ++(-2,0.75) -- ++(0,-1.5) -- ++(2,-0.75) -- cycle;
+        \begin{scope}[rotate=5]
+            \foreach \y in {1.75, 1.5, 1.25, 1, 0.75, 0.5, 0.25, 0, -0.25, -0.5, -0.75, -1, -1.25} {
+                \draw[white, line width=0.5mm] ($(A)-(0,\y)$)
+                    foreach \i in {1,...,4} {
+                        -- ++(-0.3,-0.25) -- ++(-0.3,0.25)
+                    };
+                }
+        \end{scope}
+    \end{scope}
+
+    %..................................................
+    %
+    %     Cubo mediano con ciclo de puntos al fondo
+    %__________________________________________________
+    \def\sep{0.5}   \def\cols{9}   \def\rows{18}
+    \foreach \j in {0,...,\rows} {
+        \pgfmathsetmacro\offset{mod(\j,2) == 0 ? 0 : 0.5*\sep}
+        \pgfmathsetmacro\maxi{\cols - (mod(\j,2) == 1 ? 1 : 0)}
+
+        \foreach \i in {0,...,\maxi} {
+            \pgfmathsetmacro\x{\i*\sep + \offset}
+            \pgfmathsetmacro\y{0.3+\j*\sep*0.5}
+
+            \filldraw[mainc1] ($(B)+(-\x,-\y)$) circle (1.3pt);
+        }
+    }
+
+    \draw[mainc1,very thick]
+        ($(B)+(0,-1.5)$) -- ++(0,-1.5) -- ++(-2,-0.75) -- ++(-2,0.75) -- ++(0,1.5) -- ++(2,0.75) -- cycle
+        ($(B)+(0,-1.5)$) -- ++(-2,-0.75) -- ++(-2,0.75)
+        ($(B)+(-2,-2.25)$) -- ++(0,-1.5);
+
+    %..................................................
+    %
+    %     Ciclo de rayas verticales blancas en rombo
+    %__________________________________________________
+    \begin{scope}
+        \clip ($(B)+(-6,2.25)$) -- ++(-2,0.75) -- ++(-2,-0.75) -- ++(2,-0.75) -- cycle;
+        \foreach \x in {0,...,7}{
+            \draw[white,line width=1mm] ($(B)+({-6.25 - 0.5*\x},3)$) -- ++(0,-1.5);
+        }
+    \end{scope}
+    
+    %..................................................
+    %
+    %   Ciclo de rayas verticales blancas en romboide
+    %__________________________________________________
+    \begin{scope}
+        \clip ($(B)+(-2,0.75)$) -- ++(0,1.5) -- ++(-2,-0.75) -- ++(0,-1.5) -- cycle;
+        \foreach \i in {0,...,7}{
+            \draw[white,line width=0.7mm] ($(B)+({-2.1 - 0.25*\i},0)$) -- ++(0,2.5);
+        }
+    \end{scope}
+
+    %..................................................
+    %
+    %        Ciclo de puntos blancos en rombo
+    %__________________________________________________
+    \begin{scope}
+        \clip ($(B)+(-4,4.5)$) -- ++(-2,0.75) -- ++(-2,-0.75) -- ++(2,-0.75) -- cycle;
+        \foreach \i in {0,...,21} {
+            \foreach \j in {0,...,4} {
+                \pgfmathsetmacro{\x}{-3.59 - 0.2*\i}
+                \pgfmathsetmacro{\offset}{mod(\i,2) == 1 ? 0.2 : 0}
+                \pgfmathsetmacro{\y}{3.5 + 0.4*\j + \offset}
+                \fill[white] ($(B)+(\x,\y)$) circle (1.5pt);
+            }
+        }
+    \end{scope}
+
+    %..........................................................
+    %
+    %  Ciclo de puntos blancos con relleno mainc1 en romboide
+    %__________________________________________________________
+    \begin{scope}
+        \clip ($(B)+(-2,2.25)$) -- ++(0,1.5) -- ++(-2,-0.75) -- ++(0,-1.5) -- cycle;
+        \foreach \i in {0,...,10} {
+            \foreach \j in {0,...,5} {
+                \pgfmathsetmacro{\x}{-2 - 0.2*\i}
+                \pgfmathsetmacro{\offset}{mod(\i,2) == 1 ? 0.2 : 0}
+                \pgfmathsetmacro{\y}{1.5 + 0.4*\j + \offset}
+                \filldraw[draw=white,thick,fill=mainc1] ($(B)+(\x,\y)$) circle (1.5pt);
+            }
+        }
+    \end{scope}
+
+    %....................................................................
+    %
+    %  Ciclo de triángulos mainc1 intercambiando la 'vista' en romboide
+    %____________________________________________________________________
+    \begin{scope}
+        \clip ($(B)+(-4,3)$) -- ++(0,1.5) -- ++(2,0.75) -- ++(0,-1.5) -- cycle;
+
+        \pgfmathsetmacro{\ystep}{0.4}
+        \pgfmathtruncatemacro{\maxj}{floor((5.25 - 2.25)/\ystep)}
+
+        \foreach \j in {0,...,\maxj} {%
+
+            \pgfmathsetmacro{\y}{5.25 - \j*\ystep}
+            \pgfmathtruncatemacro{\rowpar}{mod(\j,2)}
+            \pgfmathsetmacro{\basex}{-4 + \rowpar*0.2}
+
+            \ifnum\rowpar=0
+                \def\listUp{2,4,6}
+                \def\listDown{1,3,5,7}
+            \else
+                \def\listUp{1,3,5,7}
+                \def\listDown{2,4,6}
+            \fi
+  
+            \foreach \i in \listUp {%
+                \pgfmathtruncatemacro{\k}{floor((\i-1)/2)}
+                \pgfmathtruncatemacro{\modi}{mod(\i,2)}
+                \pgfmathsetmacro{\x}{\basex+\k*0.6+(1-\modi)*0.4}
+                    \fill[mainc1] ($(B)+(\x,\y) $) -- ++(0.1,-0.2) -- ++(-0.2,0) -- cycle;
+            }
+
+            \foreach \i [count=\d from 0] in \listDown {%
+                \ifnum\rowpar=0
+                    \pgfmathsetmacro{\x}{\basex + \d*0.6}
+                \else
+                    \pgfmathsetmacro{\x}{\basex + \d*0.6 + 0.2}
+                \fi
+
+                    \fill[mainc1] ($ (B)+(\x,\y) $) -- ++(0.2,0) -- ++(-0.1,-0.2) -- cycle;
+            }
+        }
+    \end{scope}
+
+    %....................................................................
+    %
+    %  Ciclo de triángulos blancos intercambiando la 'vista' en romboide
+    %____________________________________________________________________
+    \begin{scope}
+        \clip ($(B)+(-6,-0.75)$) -- ++(0,1.5) -- ++(2,0.75) -- ++(0,-1.5) -- cycle;
+
+        \pgfmathsetmacro{\ystep}{0.4}
+        \pgfmathtruncatemacro{\maxj}{floor((1.5 + 0.75)/\ystep)}
+
+        \foreach \j in {0,...,\maxj} {%
+
+            \pgfmathsetmacro{\y}{1.5 - \j*\ystep}
+            \pgfmathtruncatemacro{\rowpar}{mod(\j,2)}
+            \pgfmathsetmacro{\basex}{-6 + \rowpar*0.2}
+
+            \ifnum\rowpar=0
+                \def\listUp{2,4,6}
+                \def\listDown{1,3,5,7}
+            \else
+                \def\listUp{1,3,5,7}
+                \def\listDown{2,4,6}
+            \fi
+  
+            \foreach \i in \listUp {%
+                \pgfmathtruncatemacro{\k}{floor((\i-1)/2)}
+                \pgfmathtruncatemacro{\modi}{mod(\i,2)}
+                \pgfmathsetmacro{\x}{\basex + \k*0.6 + (1-\modi)*0.4}
+                    \fill[white] ($ (B) + (\x,\y) $) -- ++(0.1,-0.2) -- ++(-0.2,0) -- cycle;
+            }
+
+            \foreach \i [count=\d from 0] in \listDown {%
+                \ifnum\rowpar=0
+                    \pgfmathsetmacro{\x}{\basex + \d*0.6}
+                \else
+                    \pgfmathsetmacro{\x}{\basex + \d*0.6 + 0.2}
+                \fi
+
+                    \fill[white] ($ (B) + (\x,\y) $) -- ++(0.2,0) -- ++(-0.1,-0.2) -- cycle;
+            }
+        }
+    \end{scope}
+
+    %....................................................................
+    %
+    %                             Cilindro
+    %____________________________________________________________________
+    \draw[white,line width=0.35mm]
+        ($(B)+(-7.5,0.8)$) arc (180:360:0.5cm and 0.15cm) -- ++(0,0) arc (0:180:0.5cm and 0.15cm) -- ++(0,-2.5) -- ++(0,0) arc (180:360:0.5cm and 0.15cm) -- ++(0,2.5)
+        ($(B)+(-7.5,-1.7)$) arc (180:0:0.5cm and 0.15cm);
+
+    %....................................................................
+    %
+    %                Ciclo de equis blancas en romboide
+    %____________________________________________________________________
+    \begin{scope}
+        \clip ($(B)+(-2,6.75)$) -- ++(2,-0.75) -- ++(0,-1.5) -- ++(-2,0.75) -- cycle;
+        \foreach \j in {0,...,6} {
+            \pgfmathsetmacro{\y}{6.5 - 0.4*\j}
+        
+            % Si \j es par: xstart = -2
+            % Si \j es impar: xstart = -1.8
+            \pgfmathtruncatemacro{\isodd}{mod(\j,2)}
+            \ifnum\isodd=1
+                \def\xstart{-1.6}
+                \def\n{3}
+            \else
+                \def\xstart{-2}
+                \def\n{4}
+            \fi
+        
+            \foreach \i in {0,...,\numexpr\n-1} {
+                \pgfmathsetmacro{\x}{\xstart + 0.8*\i}
+                \node[white,cross out,draw,scale=0.75,line width=0.45mm] at ($(B)+(\x,\y)$) {};
+            }
+        }
+    \end{scope}
+
+    %..................................................
+    %
+    %         Cubo blanco grande y sus rayas
+    %__________________________________________________
+    \draw[white,line width=0.65mm] ($(B)+(-6,2.25)$) -- ++(0,2.25) -- ++(3,1.125) -- ++(3,-1.125)
+        -- ++(0,-2.25) -- ++(-3,-1.125) -- cycle
+        ($(B)+(0,4.5)$) -- ++(-3,-1.125) -- ++(-3,1.125)
+        ($(B)+(-3,1.125)$) -- ++(0,2.25);
+        
+    \foreach \i in {0,1,2} { \pgfmathsetmacro{\x}{-6 + 0.3*\i} \pgfmathsetmacro{\y}{1.85 - 0.1*\i}
+        \fill[white] ($(B)+(\x,\y)$) -- ++(0,0.75) -- ++(0.15,-0.05) -- ++(0,-0.75) -- cycle;
+    }
+
+    \foreach \i in {0,1,2} { \pgfmathsetmacro{\x}{-0.5 - 0.3*\i} \pgfmathsetmacro{\y}{3.9 - 0.1*\i}
+        \fill[white] ($(B)+(\x,\y)$) -- ++(0,0.75) -- ++(-0.15,-0.05) -- ++(0,-0.75) -- cycle;
+    }
+    
+    \foreach \y/\n in {5.85/10, 5.6/12} {
+        \draw[mainc1, line width=0.5mm] ($ (B)+(-3.778,\y) $)
+        \foreach \i in {1,...,\n} {
+            -- ++(-0.222,{ifthenelse(mod(\i,2)==1,-0.17,0.17)})
+        };
+    }
+
+    ..................................................
+    %
+    %      Flechas mainc1 apuntando hacia abajo
+    %__________________________________________________
+    \foreach \x/\ybase in {-1.75/7.15, -1.15/6.925, -0.55/6.7} {
+        \foreach \dy in {0, 0.55, 1.1} {
+            \draw[mainc1,line width=0.6mm] ($(B)+(\x,\ybase+\dy)$) -- ++(0.15,-0.2) -- ++(0.15,0.2);
+        }
+    }
+
+    %..............................................................
+    %
+    %       Ciclo de puntos blancos en robo (arriba derecha)
+    %______________________________________________________________
+    \begin{scope}
+        \clip ($(B)+(-2.5,9.75)$) -- ++(-2,0.75) -- ++(-2,-0.75) -- ++(2,-0.75) -- cycle;
+        \foreach \i in {0,...,21} {
+            \foreach \j in {0,...,4} {
+                \pgfmathsetmacro{\x}{-2.59 - 0.2*\i}
+                \pgfmathsetmacro{\offset}{mod(\i,2) == 1 ? 0.2 : 0}
+                \pgfmathsetmacro{\y}{8.75 + 0.4*\j + \offset}
+                \fill[white] ($(B)+(\x,\y)$) circle (1.5pt);
+            }
+        }
+    \end{scope}
+
+    %.............................................................
+    %
+    %                        Cubo pequeño
+    %_____________________________________________________________
+    \draw[mainc1,line width=0.3mm] 
+        ($(B)+(-8.5,10.5)$) -- ++(-1,-0.375) -- ++(-1,0.375)
+        ($(B)+(-9.5,10.125)$) -- ++(0,-0.75)
+        ($(B)+(-8.5,10.5)$) -- ++(-1,0.375) -- ++(-1,-0.375) -- ++(0,-0.75) -- ++(1,-0.375) -- ++(1,0.375) -- cycle;
+
+    %.............................................................
+    %
+    %            Ciclo de rayas mainc1 en semi circulo
+    %_____________________________________________________________
+    \begin{scope}
+        \clip ($(B)+(-12.5,5.25)$) -- ++(2,0.75) -- ++(0.4,-1.1) -- ++(-2,-0.85) -- cycle;
+        \clip ($(B)+(-11.5,5.625)$) circle (1.068);
+
+        \foreach \x in {-11.85, -11.65, -11.45, ..., -10.05} {
+            \draw[mainc1, line width=0.75mm] ($(B)+(\x,6)$) -- ++(-2,-3);
+        }
+    \end{scope}
+
+    %.............................................................
+    %
+    %      Ciclo de rayas mainc1 en rombo (arriba izquierda)
+    %_____________________________________________________________
+    \begin{scope}
+        \clip ($(B)+(-12.5,6.75)$) -- ++(0,1.5) -- ++(2,-0.75) -- ++(0,-1.5);
+
+        \foreach \i in {0,...,7} {
+            \pgfmathsetmacro{\y}{8.75 - 0.25*\i}
+            \draw[mainc1,line width=1mm] ($(B)+(-12.75,\y)$) -- ++(2.5,-1.5);
+        }
+    \end{scope}
+
+    %.............................................................
+    %
+    %           Ciclo de equis mainc1 (arriba izquierda)
+    %_____________________________________________________________
+    \foreach \j in {0,...,8} {
+        \pgfmathsetmacro{\y}{10 - 0.25*\j}
+    
+        \pgfmathtruncatemacro{\isodd}{mod(\j,2)}
+        \ifnum\isodd=1
+            \def\xstart{-14.65}
+            \def\n{7}
+        \else
+            \def\xstart{-14.5}
+            \def\n{8}
+        \fi
+    
+        \foreach \i in {0,...,\numexpr\n-1} {
+            \pgfmathsetmacro{\x}{\xstart - 0.3*\i}
+            \node[mainc1,cross out,draw,scale=0.5,line width=0.3mm] at ($(B)+(\x,\y)$) {};
+        }
+    }
+
+    %.............................................................
+    %
+    %                            Cono
+    %_____________________________________________________________
+    \draw[white,line width=0.35mm]
+        ($(B)+(-14,7.5)$) arc (180:360:0.5cm and 0.125cm) -- ++(0,0) arc (0:180:0.5cm and 0.125cm) -- ++(0.5,-1) -- ++(0.5,1)
+        ($(B)+(-13.5,7)$) circle (0.25cm and 0.0625cm);
+
+    %.............................................................
+    %
+    %     Ciclos para líneas en forma de sierra a la izquierda
+    %_____________________________________________________________
+    \begin{scope}
+        \clip ($(B)+(-12.5,3.75)$) -- ++(-2,0.75) -- ++(0,1.5) -- ++(2,-0.75) -- cycle;
+        
+        \foreach \x in {-14.25, -14, -13.75, -13.5, -13.25, -13} {
+            \draw[white,line width=0.6mm] ($(B)+(\x,6)$)
+                \foreach \i in {1,...,4} {
+                    -- ++(0.2,-0.3) -- ++(-0.2,-0.3)
+                };
+        }
+    \end{scope}
+
+    %..............................................................
+    %
+    %    Flechas blancas dentro de un rombo mirando hacia abajo
+    %______________________________________________________________
+    \foreach \x/\ybase in {-14.25/3.15, -13.65/2.925, -13.05/2.7} {
+        \foreach \dy in {0, 0.55, 1.1} {
+            \draw[white,line width=0.6mm] ($(B)+(\x,\ybase+\dy)$) -- ++(0.15,-0.2) -- ++(0.15,0.2);
+        }
+    }
+    
+    %..............................................................
+    %
+    %               Ciclo de barras verticales mainc1
+    %______________________________________________________________
+    \begin{scope}
+        \clip ($(C)+(2,6.25)$) -- ++(2,-0.75) -- ++(0,-1.5) -- ++(-2,0.75);
+        
+        \foreach \i in {0,...,8} {
+            \draw[mainc1,line width=0.6mm] ($(C)+({2.03 + 0.2375*\i},6.25)$) -- ++(0, -2.25);
+        }
+    \end{scope}
+
+    %..............................................................
+    %
+    %             Ciclo de puntos mainc1 rotados 20.1°
+    %______________________________________________________________
+    \begin{scope}
+        \clip ($(C)+(0,4)$) -- ++(2,0.75) -- ++(0,-1.5) -- ++(-2,-0.75);
+        \begin{scope}[rotate=20.1]
+            \foreach \i in {0,...,21} {
+                \foreach \j in {0,...,6} {
+                    \pgfmathsetmacro{\x}{3.2 - 0.2*\i} \pgfmathsetmacro{\offset}{mod(\i,2) == 1 ? 0.2 : 0} \pgfmathsetmacro{\y}{2.2 + 0.4*\j + \offset}
+                    \fill[mainc1] ($(C)+(\x,\y)$) circle (1.5pt);
+                }
+            }
+        \end{scope}
+    \end{scope}
+
+    %.............................................................
+    %
+    %                    Triángulos abajo derecha
+    %_____________________________________________________________
+    \fill[white] ($(B)+(1.75,-11.75)$) -- ++(-2.4,-1) -- ++(2.4,-1) -- cycle;
+    \fill[mainc1] ($(B)+(1.5,-11.5)$) -- ++(-2,-0.75) -- ++(2,-0.75) -- cycle
+        ($(B)+(-0.5,-11.875)$) -- ++(0,-0.75) -- ++(-0.75,0.375) -- cycle
+        ($(B)+(-2.4,-11.875)$) -- ++(0,-0.75) -- ++(-0.75,0.375) -- cycle;
+    \draw[mainc1,line width=0.75mm] ($(B)+(-1.45,-11.875)$) -- ++(0,-0.75) -- ++(-0.75,0.375) -- cycle
+        ($(B)+(-4.5,-11.875)$) -- ++(0,-0.75) -- ++(-0.75,0.375) -- cycle;
+
+    %.............................................................
+    %
+    %                            Cono
+    %_____________________________________________________________
+    \draw[mainc1,line width=0.45mm]
+        ($(B)+(-15,-10)$) arc (180:360:0.5cm and 0.125cm) -- ++(0,0) arc (0:180:0.5cm and 0.125cm)
+        ($(B)+(-15,-10)$) -- ++(0.5,1) -- ++(0.5,-1);
+
+    %.............................................................
+    %
+    %             Ciclo rayas en sierra verticales
+    %_____________________________________________________________
+    \foreach \x in {-14.7,-14.45,-14.2} {
+        \draw[mainc1,line width=0.5mm] ($(B)+(\x,-10.5)$)
+            \foreach \i in {1,2,3} {
+                -- ++(-0.2,-0.3) -- ++(0.2,-0.3)
+            };
+    }
+
+    % Sombras
+    \node[anchor=north west,right] (titulo) at ($(C)+(1.6,1.55)$)
+        {\gravity\fontsize{45}{47}\selectfont\color{black!95}\MakeUppercase{Disquisitio}};
+    \node[anchor=north west,right] (portada) at ($(titulo.south west)+(0,-1.4)$)
+        {\gravity\fontsize{65}{67}\selectfont\bfseries\color{black!95}\MakeUppercase{Elementalis}};
+    \node[anchor=north west,right] (autor) at ($(C)+(1.6,-8.6)$)
+        {\creato\fontsize{18}{28}\selectfont\color{black!95}Template developed by Vicente C Gámez}; % Nombre del profesor $\bullet$ Nombre del autor
+    \node[anchor=north west,right] (edicion) at ($(B)+(-6.975,7.575)$)
+        {\ipn\fontsize{14}{18}\selectfont\color{black!95}Edición};
+    % Letras
+    \node[anchor=north west] at ($(titulo.north west)+(-0.1,0.1)$)
+        {\gravity\fontsize{45}{47}\selectfont\color{white}\MakeUppercase{Disquisitio}};
+    \node[anchor=north west] at ($(portada.north west)+(-0.1,0.1)$)
+        {\gravity\fontsize{65}{67}\selectfont\bfseries\color{white}\MakeUppercase{Elementalis}};
+    \node[anchor=north west] at ($(autor.north west)+(-0.025,0.025)$)
+        {\creato\fontsize{18}{28}\selectfont\color{white}Template developed by Vicente C Gámez}; % Nombre del profesor $\bullet$ Nombre del autor
+    \node[anchor=north west] at ($(edicion.north west)+(-0.025,0.025)$)
+        {\ipn\fontsize{14}{18}\selectfont\color{white}Edición};
+\end{tikzpicture}
+
+\cleardoublepage
